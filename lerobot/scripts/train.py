@@ -205,6 +205,10 @@ def train(cfg: TrainPipelineConfig):
         batch = next(dl_iter)
         train_tracker.dataloading_s = time.perf_counter() - start_time
 
+        for k, v in batch.items():
+            if k.startswith("observation.image"):
+                print(k, v.shape, v.dtype, v.min().item(), v.max().item())
+
         for key in batch:
             if isinstance(batch[key], torch.Tensor):
                 batch[key] = batch[key].to(device, non_blocking=True)
